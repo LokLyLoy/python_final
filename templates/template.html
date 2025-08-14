@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    {% block rightHeader %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <h1 class="logo" onclick="window.location.href='/'">
+            <img src="/static/img/seteclogo.png" alt="logo" class="logo-img" />
+            Boak<span class="highlight">'s Store</span>
+        </h1>
+        <div>
+            <a href="/cart" class="cart-link">Cart</a>
+        </div>
+    </header>
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

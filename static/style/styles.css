@@ -1,0 +1,60 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    background-color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+/* Logo */
+.logo {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #1f2937;
+    letter-spacing: -0.015em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-img {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .logo-img {
+        display: block;
+        object-fit: cover;
+        overflow: hidden;
+        width: 35%;
+    }
+}
+
+.highlight {
+    color: #2563eb;
+}
+
+.cart-link {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.cart-link:hover {
+    text-decoration: underline;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}

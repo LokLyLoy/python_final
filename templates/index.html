@@ -1,0 +1,128 @@
+{% extends "template.html" %}
+
+{% block title %}Boak's Store - Catalog{% endblock %}
+
+{% block rightHeader %}
+    <link rel="stylesheet" href="/static/style/index.css">
+{% endblock %}
+
+{% block content %}
+<div id="catalog-page">
+    <div id="notification-popup" class="notification-hidden">
+        <span id="notification-message"></span>
+    </div>
+
+    <div class="filters-container">
+        <div class="filter-group search-group">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-bar" class="filter-input" placeholder="Search products...">
+        </div>
+
+        <div class="filter-group">
+            <i class="fas fa-tag"></i>
+            <select id="category-filter" class="filter-select">
+                <option value="">All Categories</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Home">Home</option>
+                <option value="Fitness">Fitness</option>
+            </select>
+            <i class="fas fa-chevron-down select-arrow"></i>
+        </div>
+
+        <div class="price-range-group">
+            <div class="filter-group price-input">
+                <i class="fas fa-dollar-sign"></i>
+                <input type="number" id="price-min" class="filter-input" placeholder="Min">
+            </div>
+            <span class="price-separator">-</span>
+            <div class="filter-group price-input">
+                <i class="fas fa-dollar-sign"></i>
+                <input type="number" id="price-max" class="filter-input" placeholder="Max">
+            </div>
+        </div>
+
+        <button class="filter-button" onclick="filterProducts()">
+            Filter
+        </button>
+    </div>
+
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <div class="product-image-container">
+                <img src="/static/img/{{ product.images[0] }}" alt="{{ product.name }}" class="product-image">
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">{{ product.name }}</h3>
+                <p class="product-price">${{ product.price }}</p>
+                <p class="product-description">{{ product.description }}</p>
+                <div class="product-actions">
+                    <a href="/product/{{ product.id }}" class="details-link">View Details</a>
+                    <button class="add-to-cart-btn" onclick="addToCart({{ product.id }})">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function showNotification(message, isSuccess) {
+        const popup = document.getElementById('notification-popup');
+        const messageElement = document.getElementById('notification-message');
+
+        messageElement.textContent = message;
+        popup.className = isSuccess ? 'notification-visible notification-success' : 'notification-visible notification-error';
+
+        setTimeout(() => {
+            popup.className = 'notification-hidden';
+        }, 3000);
+    }
+
+    function addToCart(productId) {
+        try {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const product = {{ products|tojson }}.find(p => p.id === productId);
+            const cartItem = cart.find(item => item.id === productId);
+
+            if (cartItem) {
+                cartItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            showNotification('Added to cart successfully!', true);
+        } catch (error) {
+            showNotification('Failed to add to cart', false);
+            console.error('Error adding to cart:', error);
+        }
+    }
+
+    function filterProducts() {
+        try {
+            const search = document.getElementById('search-bar').value.toLowerCase();
+            const category = document.getElementById('category-filter').value;
+            const minPrice = parseFloat(document.getElementById('price-min').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('price-max').value) || Infinity;
+            const products = document.querySelectorAll('.product-card');
+
+            products.forEach(card => {
+                const name = card.querySelector('h3').textContent.toLowerCase();
+                const price = parseFloat(card.querySelector('.product-price').textContent.replace('$', ''));
+                const productCategory = {{ products|tojson }}.find(p => p.name === card.querySelector('h3').textContent).category;
+                const matchesSearch = name.includes(search);
+                const matchesCategory = !category || productCategory === category;
+                const matchesPrice = price >= minPrice && price <= maxPrice;
+
+                card.style.display = matchesSearch && matchesCategory && matchesPrice ? 'block' : 'none';
+            });
+
+            showNotification('Filters applied successfully', true);
+        } catch (error) {
+            showNotification('Error applying filters', false);
+            console.error('Error filtering products:', error);
+        }
+    }
+</script>
+{% endblock %}

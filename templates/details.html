@@ -1,0 +1,112 @@
+{% extends "template.html" %}
+
+{% block title %}{{ product.name }} - Boak's Store{% endblock %}
+
+{% block rightHeader %}
+	<link rel="stylesheet" href="/static/style/details.css">
+{% endblock %}
+
+{% block content %}
+<div class="product-details-container">
+    <!-- Notification Popup -->
+    <div id="notification-popup" class="notification-hidden">
+        <span id="notification-message"></span>
+    </div>
+
+    <!-- Product Header -->
+    <div class="product-header">
+        <h1 class="product-title">{{ product.name }}</h1>
+        <a href="/" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Catalog
+        </a>
+    </div>
+
+    <!-- Product Content -->
+    <div class="product-content">
+        <!-- Image Gallery -->
+        <div class="image-gallery">
+            {% for image in product.images %}
+            <div class="gallery-item">
+                <img src="/static/img/{{ image }}" alt="{{ product.name }}" class="product-image">
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Product Info -->
+        <div class="product-info">
+            <div class="price-section">
+                <span class="price">${{ product.price }}</span>
+                <span class="stock-status {{ 'in-stock' if product.stock > 0 else 'out-of-stock' }}">
+                    {{ 'In Stock' if product.stock > 0 else 'Out of Stock' }}
+                </span>
+            </div>
+
+            <p class="product-description">{{ product.description }}</p>
+
+            <!-- Quantity Selector -->
+            <div class="quantity-control">
+                <label for="quantity">Quantity:</label>
+                <div class="quantity-selector">
+                    <button class="quantity-btn" onclick="updateQuantity(-1)">-</button>
+                    <input type="number" id="quantity" value="1" min="1" max="{{ product.stock }}">
+                    <button class="quantity-btn" onclick="updateQuantity(1)">+</button>
+                </div>
+            </div>
+
+            <!-- Add to Cart Button -->
+            <button class="add-to-cart-btn" onclick="addToCart({{ product.id }})" {{ 'disabled' if product.stock == 0 else '' }}>
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Notification function
+    function showNotification(message, isSuccess) {
+        const popup = document.getElementById('notification-popup');
+        const messageElement = document.getElementById('notification-message');
+
+        messageElement.textContent = message;
+        popup.className = isSuccess ? 'notification-visible notification-success' : 'notification-visible notification-error';
+
+        setTimeout(() => {
+            popup.className = 'notification-hidden';
+        }, 3000);
+    }
+
+    function updateQuantity(change) {
+        const input = document.getElementById('quantity');
+        let value = parseInt(input.value) + change;
+        if (value < 1) value = 1;
+        if (value > {{ product.stock }}) value = {{ product.stock }};
+        input.value = value;
+    }
+
+    function addToCart(productId) {
+        try {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const product = {{ product|tojson }};
+            const cartItem = cart.find(item => item.id === productId);
+
+            if (cartItem) {
+                cartItem.quantity += quantity;
+            } else {
+                cart.push({ ...product, quantity });
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            showNotification('Added to cart successfully!', true);
+
+            // Update cart count in header if exists
+            if (typeof updateCartCount === 'function') {
+                updateCartCount();
+            }
+        } catch (error) {
+            showNotification('Failed to add to cart', false);
+            console.error('Error adding to cart:', error);
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends "template.html" %}
+
+{% block title %}Checkout - Boak's Store{% endblock %}
+
+{% block rightHeader %}
+    <link rel="stylesheet" href="/static/style/checkout.css">
+{% endblock %}
+
+{% block content %}
+<div id="notification-popup" class="notification">
+    Order placed successfully! Redirecting to home page...
+</div>
+
+<div class="checkout-container">
+    <div class="checkout-header">
+        <h1>Checkout</h1>
+        <a href="/cart" class="back-link">← Back to Cart</a>
+    </div>
+
+    <div class="checkout-layout">
+        <div class="order-summary-section">
+            <h2>Order Summary</h2>
+            <div id="cart-summary" class="cart-summary-container"></div>
+        </div>
+
+        <div class="form-section">
+            <form id="checkout-form" class="checkout-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Mr. Kuy Dara" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="kuydara@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+855 123 456 789" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Shipping Address</label>
+                    <textarea id="address" name="address" placeholder="St, Vengsreng" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-order">Place Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function renderCartSummary() {
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const cartSummary = document.getElementById('cart-summary');
+        let total = 0;
+        cartSummary.innerHTML = '';
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            cartSummary.innerHTML += `
+                <div class="cart-item">
+                    <h3>${item.name}</h3>
+                    <p>$${item.price} × ${item.quantity}</p>
+                    <p>$${itemTotal.toFixed(2)}</p>
+                </div>
+            `;
+        });
+        cartSummary.innerHTML += `
+            <div class="cart-item" style="font-weight: bold; border-top: 1px solid #cbd5e0; padding-top: 1rem;">
+                <h3>Total</h3>
+                <p></p>
+                <p>$${total.toFixed(2)}</p>
+            </div>
+        `;
+    }
+
+    function showNotification() {
+        const popup = document.getElementById('notification-popup');
+        popup.classList.add('show');
+
+        setTimeout(() => {
+            popup.classList.remove('show');
+            // Redirect after the animation completes
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 300);
+        }, 3000);
+    }
+
+    document.getElementById('checkout-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        formData.append('cart_items', JSON.stringify(cart));
+
+        fetch('/checkout', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                localStorage.removeItem('cart');
+                showNotification();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    window.onload = renderCartSummary;
+</script>
+{% endblock %}

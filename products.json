@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1,
+        "name": "Wireless Headphones",
+        "price": 99.99,
+        "category": "Electronics",
+        "description": "High-quality wireless headphones with noise cancellation.",
+        "stock": 50,
+        "images": ["headphones.jpg"]
+    },
+    {
+        "id": 2,
+        "name": "Smart Watch",
+        "price": 199.99,
+        "category": "Electronics",
+        "description": "Feature-rich smartwatch with health tracking.",
+        "stock": 30,
+        "images": ["smartwatch.jpg"]
+    },
+    {
+        "id": 3,
+        "name": "Coffee Maker",
+        "price": 49.99,
+        "category": "Home",
+        "description": "Automatic coffee maker for your perfect morning brew.",
+        "stock": 25,
+        "images": ["coffee_maker.jpg"]
+    },
+    {
+        "id": 4,
+        "name": "Yoga Mat",
+        "price": 29.99,
+        "category": "Fitness",
+        "description": "Non-slip yoga mat for your workout sessions.",
+        "stock": 40,
+        "images": ["yoga_mat.jpg"]
+    },
+    {
+        "id": 5,
+        "name": "Bluetooth Speaker",
+        "price": 79.99,
+        "category": "Electronics",
+        "description": "Portable Bluetooth speaker with great sound quality.",
+        "stock": 35,
+        "images": ["speaker.jpg"]
+    },
+    {
+        "id": 6,
+        "name": "Running Shoes",
+        "price": 89.99,
+        "category": "Fitness",
+        "description": "Comfortable running shoes with great support.",
+        "stock": 20,
+        "images": ["shoes.jpg"]
+    }
+]
