@@ -140,6 +140,21 @@
     }
 }
 
+@media (max-width: 480px) {
+    .price-range-group {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .price-separator {
+        display: none;
+    }
+
+    .price-input .filter-input {
+        width: 100%;
+    }
+}
+
 /* Product Grid Styles */
 .product-grid {
     display: grid;
