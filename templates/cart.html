@@ -20,7 +20,7 @@
             <span>Subtotal</span>
             <span>$<span id="cart-total">0.00</span></span>
         </div>
-        <button class="checkout-btn" onclick="window.location.href='/checkout'">Proceed to Checkout</button>
+        <button id="checkout-btn" class="checkout-btn" onclick="window.location.href='/checkout'">Proceed to Checkout</button>
     </div>
 </div>
 
@@ -29,6 +29,8 @@
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
         const cartItems = document.getElementById('cart-items');
         const cartTotal = document.getElementById('cart-total');
+        const checkoutBtn = document.getElementById('checkout-btn');
+
         cartItems.innerHTML = '';
         let total = 0;
 
@@ -53,6 +55,13 @@
 
         if (cart.length === 0) {
             cartItems.innerHTML = '<p>Your cart is empty</p>';
+            checkoutBtn.disabled = true; // disable checkout
+            checkoutBtn.style.cursor = 'not-allowed';
+            checkoutBtn.style.opacity = '0.6';
+        } else {
+            checkoutBtn.disabled = false; // enable checkout
+            checkoutBtn.style.cursor = 'pointer';
+            checkoutBtn.style.opacity = '1';
         }
 
         cartTotal.textContent = total.toFixed(2);
