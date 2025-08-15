@@ -3,13 +3,24 @@
 {% block title %}Boak's Store - Catalog{% endblock %}
 
 {% block rightHeader %}
-    <link rel="stylesheet" href="/static/style/index.css">
+<link rel="stylesheet" href="/static/style/index.css">
 {% endblock %}
 
 {% block content %}
 <div id="catalog-page">
     <div id="notification-popup" class="notification-hidden">
         <span id="notification-message"></span>
+    </div>
+
+    <div class="slider-container">
+        <div class="slider-wrapper">
+            <div class="slide"><img src="/static/slider/1.jpg" alt="Slide 1"></div>
+            <div class="slide"><img src="/static/slider/2.jpg" alt="Slide 2"></div>
+            <div class="slide"><img src="/static/slider/3.jpg" alt="Slide 3"></div>
+            <div class="slide"><img src="/static/slider/4.jpg" alt="Slide 3"></div>
+        </div>
+        <button class="slider-prev">&#10094;</button>
+        <button class="slider-next">&#10095;</button>
     </div>
 
     <div class="filters-container">
@@ -64,9 +75,60 @@
         </div>
         {% endfor %}
     </div>
+
+
+</div>
+
+<div class="footer-container">
+    <div class="footer-section">
+        <h4>Boak's Store</h4>
+        <p>Your one-stop shop for Electronics, Home, Fitness, and more!</p>
+    </div>
+
+    <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/catalog">Catalog</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+    </div>
+
+    <div class="footer-section">
+        <h4>Follow Us</h4>
+        <div class="social-icons">
+            <a href="#" class="fab fa-facebook-f"></a>
+            <a href="#" class="fab fa-twitter"></a>
+            <a href="#" class="fab fa-instagram"></a>
+        </div>
+    </div>
+</div>
+<div class="footer-bottom">
+    &copy; {{ current_year }} Boak's Store. All rights reserved.
 </div>
 
 <script>
+
+const wrapper = document.querySelector('.slider-wrapper');
+const slides = document.querySelectorAll('.slide');
+const prevBtn = document.querySelector('.slider-prev');
+const nextBtn = document.querySelector('.slider-next');
+let index = 0;
+
+function showSlide(i) {
+    if (i < 0) index = slides.length - 1;
+    else if (i >= slides.length) index = 0;
+    else index = i;
+    wrapper.style.transform = `translateX(-${index * 100}%)`;
+}
+
+prevBtn.addEventListener('click', () => showSlide(index - 1));
+nextBtn.addEventListener('click', () => showSlide(index + 1));
+
+// Optional: auto-slide every 5s
+setInterval(() => showSlide(index + 1), 5000);
+
     function showNotification(message, isSuccess) {
         const popup = document.getElementById('notification-popup');
         const messageElement = document.getElementById('notification-message');
@@ -82,21 +144,22 @@
     function addToCart(productId) {
         try {
             let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            const product = {{ products|tojson }}.find(p => p.id === productId);
-            const cartItem = cart.find(item => item.id === productId);
+            const product = {{ products| tojson
+        }}.find(p => p.id === productId);
+    const cartItem = cart.find(item => item.id === productId);
 
-            if (cartItem) {
-                cartItem.quantity += 1;
-            } else {
-                cart.push({ ...product, quantity: 1 });
-            }
+    if (cartItem) {
+        cartItem.quantity += 1;
+    } else {
+        cart.push({ ...product, quantity: 1 });
+    }
 
-            localStorage.setItem('cart', JSON.stringify(cart));
-            showNotification('Added to cart successfully!', true);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    showNotification('Added to cart successfully!', true);
         } catch (error) {
-            showNotification('Failed to add to cart', false);
-            console.error('Error adding to cart:', error);
-        }
+        showNotification('Failed to add to cart', false);
+        console.error('Error adding to cart:', error);
+    }
     }
 
     function filterProducts() {
@@ -110,19 +173,20 @@
             products.forEach(card => {
                 const name = card.querySelector('h3').textContent.toLowerCase();
                 const price = parseFloat(card.querySelector('.product-price').textContent.replace('$', ''));
-                const productCategory = {{ products|tojson }}.find(p => p.name === card.querySelector('h3').textContent).category;
-                const matchesSearch = name.includes(search);
-                const matchesCategory = !category || productCategory === category;
-                const matchesPrice = price >= minPrice && price <= maxPrice;
+                const productCategory = {{ products| tojson
+            }}.find(p => p.name === card.querySelector('h3').textContent).category;
+        const matchesSearch = name.includes(search);
+        const matchesCategory = !category || productCategory === category;
+        const matchesPrice = price >= minPrice && price <= maxPrice;
 
-                card.style.display = matchesSearch && matchesCategory && matchesPrice ? 'block' : 'none';
-            });
+        card.style.display = matchesSearch && matchesCategory && matchesPrice ? 'block' : 'none';
+    });
 
-            showNotification('Filters applied successfully', true);
+    showNotification('Filters applied successfully', true);
         } catch (error) {
-            showNotification('Error applying filters', false);
-            console.error('Error filtering products:', error);
-        }
+        showNotification('Error applying filters', false);
+        console.error('Error filtering products:', error);
+    }
     }
 </script>
 {% endblock %}

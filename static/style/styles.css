@@ -44,14 +44,39 @@ body {
     color: #2563eb;
 }
 
+.cart-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-right: 6px;
+    filter: brightness(0) invert(1); /* makes PNG white */
+}
+
 .cart-link {
-    color: #2563eb;
+    display: inline-block;
+    background-color: #2563eb; /* blue background */
+    color: #ffffff; /* white text */
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
     text-decoration: none;
+    transition: background-color 0.25s ease, transform 0.15s ease;
+    box-shadow: 0 2px 5px rgba(37, 99, 235, 0.3);
+    line-height: 5px;
 }
 
 .cart-link:hover {
-    text-decoration: underline;
+    background-color: #1e4fcf;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(37, 99, 235, 0.4);
 }
+
+.cart-link:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
+}
+
 
 .container {
     max-width: 1200px;

@@ -31,6 +31,50 @@
     background-color: #f56565;
 }
 
+.slider-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 20px auto;
+    overflow: hidden; /* hide extra slides */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.slider-wrapper {
+    display: flex; /* align slides in a row */
+    transition: transform 0.5s ease-in-out;
+    width: 100%; /* optional, ensures full width */
+}
+
+.slide {
+    min-width: 100%; /* each slide takes full container width */
+    box-sizing: border-box;
+}
+
+.slide img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.slider-prev,
+.slider-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,0.4);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 20px;
+}
+
+.slider-prev { left: 10px; }
+.slider-next { right: 10px; }
+
+
 .filters-container {
     display: flex;
     flex-wrap: wrap;
@@ -96,6 +140,7 @@
     transition: background-color 0.3s;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
 }
 
@@ -261,5 +306,81 @@
 
     .product-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+.site-footer {
+    background-color: #2d3748;
+    color: #edf2f7;
+    padding: 40px 20px 20px 20px;
+    margin-top: 40px;
+    font-size: 14px;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 20px;
+}
+
+.footer-section h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #fff;
+}
+
+.footer-section p,
+.footer-section ul,
+.footer-section a {
+    color: #cbd5e0;
+    text-decoration: none;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 5px;
+}
+
+.footer-section ul li a:hover {
+    color: #63b3ed; /* match your primary blue theme */
+}
+
+.social-icons a {
+    display: inline-block;
+    margin-right: 10px;
+    color: #cbd5e0;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #63b3ed;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    border-top: 1px solid #4a5568;
+    padding-top: 10px;
+    color: #a0aec0;
+}
+
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .footer-section {
+        width: 100%;
+        margin-bottom: 20px;
     }
 }

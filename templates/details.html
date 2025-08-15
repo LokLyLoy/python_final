@@ -3,7 +3,7 @@
 {% block title %}{{ product.name }} - Boak's Store{% endblock %}
 
 {% block rightHeader %}
-	<link rel="stylesheet" href="/static/style/details.css">
+<link rel="stylesheet" href="/static/style/details.css">
 {% endblock %}
 
 {% block content %}
@@ -54,7 +54,8 @@
             </div>
 
             <!-- Add to Cart Button -->
-            <button class="add-to-cart-btn" onclick="addToCart({{ product.id }})" {{ 'disabled' if product.stock == 0 else '' }}>
+            <button class="add-to-cart-btn" onclick="addToCart({{ product.id }})" {{ 'disabled' if product.stock==0
+                else '' }}>
                 <i class="fas fa-shopping-cart"></i> Add to Cart
             </button>
         </div>
@@ -79,31 +80,33 @@
         const input = document.getElementById('quantity');
         let value = parseInt(input.value) + change;
         if (value < 1) value = 1;
-        if (value > {{ product.stock }}) value = {{ product.stock }};
-        input.value = value;
+        if (value > {{ product.stock }})
+            value = {{ product.stock }};
+    input.value = value;
     }
 
     function addToCart(productId) {
         try {
             let cart = JSON.parse(localStorage.getItem('cart') || '[]');
             const quantity = parseInt(document.getElementById('quantity').value);
-            const product = {{ product|tojson }};
-            const cartItem = cart.find(item => item.id === productId);
+            const product = {{ product| tojson
+        }};
+    const cartItem = cart.find(item => item.id === productId);
 
-            if (cartItem) {
-                cartItem.quantity += quantity;
-            } else {
-                cart.push({ ...product, quantity });
-            }
+    if (cartItem) {
+        cartItem.quantity += quantity;
+    } else {
+        cart.push({ ...product, quantity });
+    }
 
-            localStorage.setItem('cart', JSON.stringify(cart));
-            showNotification('Added to cart successfully!', true);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    showNotification('Added to cart successfully!', true);
 
-            // Update cart count in header if exists
-            if (typeof updateCartCount === 'function') {
-                updateCartCount();
-            }
-        } catch (error) {
+    // Update cart count in header if exists
+        if (typeof updateCartCount === 'function') {
+            updateCartCount();
+        }
+            } catch (error) {
             showNotification('Failed to add to cart', false);
             console.error('Error adding to cart:', error);
         }

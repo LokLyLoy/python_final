@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify
 import json
 import requests
 from flask_mail import Mail, Message
-
+from datetime import datetime
 app = Flask(__name__)
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -33,7 +33,7 @@ SMTP_PORT = 587
 
 @app.route('/')
 def catalog():
-    return render_template('index.html', products=products)
+    return render_template('index.html', products=products, current_year=datetime.now().year)
 
 
 @app.route('/product/<int:product_id>')
